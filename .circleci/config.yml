@@ -34,7 +34,7 @@ jobs:
       - persist_to_workspace:
           root: ~/repo
           paths: "."
-  deploy-beta:
+  deploy:
     <<: *defaults
     steps:
       - attach_workspace:
@@ -45,17 +45,29 @@ jobs:
       - run:
           name: Publish package
           command: npm publish
-          deploy:
-            <<: *defaults
-            steps:
-              - attach_workspace:
-                  at: ~/repo
-              - run:
-                  name: Authenticate with registry
-                  command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
-              - run:
-                  name: Publish package
-                  command: npm publish --tag beta
+  deploy-beta:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+      - run:
+          name: Publish package
+          command: npm publish --tag beta
+    deploy-alpha:
+      <<: *defaults
+      steps:
+        - attach_workspace:
+            at: ~/repo
+        - run:
+            name: Authenticate with registry
+            command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+        - run:
+            name: Publish package
+            command: npm publish --tag alpha
+        
 
 workflows:
   version: 2
@@ -78,6 +90,14 @@ workflows:
             - test
           filters:
             tags:
-              only: ["/^v.*.beta/", "/^v.*.alpha/"]
+              only: [ "/^v.*.beta/" ]
+            branches:
+              ignore: ["/.*/"]
+      - deploy-alpha:
+          requires:
+            - test
+          filters:
+            tags:
+              only: [ "/^v.*.alpha/" ]
             branches:
               ignore: ["/.*/"]
