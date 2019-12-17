@@ -34,7 +34,7 @@ jobs:
       - persist_to_workspace:
           root: ~/repo
           paths: "."
-  deploy:
+  deploy-release:
     <<: *defaults
     steps:
       - attach_workspace:
@@ -44,7 +44,7 @@ jobs:
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
       - run:
           name: Publish package
-          command: npm publish
+          command: npm publish --tag release
   deploy-beta:
     <<: *defaults
     steps:
@@ -71,13 +71,13 @@ jobs:
 
 workflows:
   version: 2
-  test-deploy:
+  build-deploy:
     jobs:
       - test:
           filters:
             tags:
               only: /^v.*/
-      - deploy:
+      - deploy-release:
           requires:
             - test
           filters:
