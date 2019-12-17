@@ -82,8 +82,7 @@ workflows:
             - test
           filters:
             tags:
-              only: /^v.*/
-              ignore: "^v.*.(beta|alpha)$"
+              only: /^v.*.release$/
             branches:
               ignore: "/.*/"
       - deploy-beta:
@@ -92,7 +91,6 @@ workflows:
           filters:
             tags:
               only: "/^v.*.beta$/"
-              ignore: "^v.*"
             branches:
               ignore: "/.*/"
       - deploy-alpha:
@@ -101,6 +99,5 @@ workflows:
           filters:
             tags:
               only: "/^v.*.alpha$/"
-              ignore:  "/^v.*/"
             branches:
               ignore: "/.*/"
