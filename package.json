@@ -1,6 +1,6 @@
 {
   "name": "protool-frontend",
-  "version": "0.0.1.alpha",
+  "version": "0.0.1",
   "description": "protool cms frontend",
   "main": "index.js",
   "repository": "git@github.com:protool-dev/protool-frontend.git",
