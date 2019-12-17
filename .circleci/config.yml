@@ -83,24 +83,24 @@ workflows:
           filters:
             tags:
               only: /^v.*/
-              ignore: ["/^v.*.beta$/", "/^v.*.alpha$/"]
+              ignore: "^v.*.(beta|alpha)$"
             branches:
-              ignore: ["/.*/"]
+              ignore: "/.*/"
       - deploy-beta:
           requires:
             - test
           filters:
             tags:
               only: "/^v.*.beta$/"
-              ignore: ["/^v.*/", "/^v.*.alpha$/"]
+              ignore: "^v.*"
             branches:
-              ignore: ["/.*/"]
+              ignore: "/.*/"
       - deploy-alpha:
           requires:
             - test
           filters:
             tags:
-              only: [ "/^v.*.alpha$/" ]
-              ignore: ["/^v.*.beta$/", "/^v.*/"]
+              only: "/^v.*.alpha$/"
+              ignore:  "/^v.*/"
             branches:
-              ignore: ["/.*/"]
+              ignore: "/.*/"
